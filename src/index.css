@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -7,7 +15,72 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.login-details {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.login-details img {
+  border: 1px solid hsl(270 50% 65%);
+  border-radius: 50%;
+  display: block;
+  height: 50px;
+  object-fit: cover;
+  width: 50px;
+}
+
+.lookup-form {
+  align-items: end;
+  background-color: hsl(270 50% 95%);
+  border: 1px solid hsl(270 50% 85%);
+  border-radius: 0.25rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem auto 0;
+  max-width: 500px;
+  padding: 1rem 3rem 1.25rem;
+}
+
+.lookup-form label {
+  text-align: left;
+  width: 250px;
+}
+
+.lookup-form input {
+  width: 100%;
+}
+
+.lookup-form input,
+.lookup-form button {
+  border: 1px solid hsl(270 50% 65%);
+  border-radius: 0.25rem;
+  display: block;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.user-info {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 3rem auto 0;
+  max-width: 500px;
+}
+
+.user-info img {
+  border: 1px solid hsl(270 50% 65%);
+  border-radius: 50%;
+  display: block;
+  height: 100px;
+  object-fit: cover;
+  width: 100px;
+}
+
+.user-info h2 {
+  font-size: 1.25rem;
 }
