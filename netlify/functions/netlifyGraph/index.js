@@ -48,8 +48,21 @@ export const verifySignature = (input) => {
   return true
 }
 
-const operationsDoc = `query ExampleQuery @netlify(doc: "An example query to start with.") {
+const operationsDoc = `mutation ExampleMutation @netlify(id: "85025383-9c43-4c29-95fc-9d763ac57077", doc: "An empty mutation to start from") {
   __typename
+}
+
+query GitHubData($gitHubOAuthToken: String!, $login: String!) @netlify(id: "c86d1939-bcfd-4f7a-844b-328111f24228", doc: "An example query to start with.") {
+  gitHub(auths: {gitHubOAuthToken: $gitHubOAuthToken}) {
+    user(login: $login) {
+      login
+      name
+      avatarUrl
+      viewerCanSponsor
+      viewerIsSponsoring
+      isSponsoringViewer
+    }
+  }
 }`
 
 
@@ -175,11 +188,20 @@ export const verifyRequestSignature = (request) => {
   return verifySignature({ secret, signature, body: body || '' })
 }
 
-export const fetchExampleQuery = (
+export const executeExampleMutation  = (
   variables,
   accessToken,
 ) => {
-  return fetchOneGraph(accessToken, operationsDoc, "ExampleQuery", variables)
+  return fetchOneGraph(accessToken, operationsDoc, "ExampleMutation", variables)
+}
+
+
+
+export const fetchGitHubData = (
+  variables,
+  accessToken,
+) => {
+  return fetchOneGraph(accessToken, operationsDoc, "GitHubData", variables)
 }
 
 
@@ -189,9 +211,13 @@ export const fetchExampleQuery = (
  */
 const functions = {
   /**
+  * An empty mutation to start from
+  */
+  executeExampleMutation : executeExampleMutation ,
+  /**
   * An example query to start with.
   */
-  fetchExampleQuery: fetchExampleQuery
+  fetchGitHubData: fetchGitHubData
 }
 
 export default functions

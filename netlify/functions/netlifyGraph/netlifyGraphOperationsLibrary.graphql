@@ -1,0 +1,16 @@
+mutation ExampleMutation @netlify(id: "85025383-9c43-4c29-95fc-9d763ac57077", doc: "An empty mutation to start from") {
+  __typename
+}
+
+query GitHubData($gitHubOAuthToken: String!, $login: String!) @netlify(id: "c86d1939-bcfd-4f7a-844b-328111f24228", doc: "An example query to start with.") {
+  gitHub(auths: {gitHubOAuthToken: $gitHubOAuthToken}) {
+    user(login: $login) {
+      login
+      name
+      avatarUrl
+      viewerCanSponsor
+      viewerIsSponsoring
+      isSponsoringViewer
+    }
+  }
+}

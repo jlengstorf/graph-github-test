@@ -8,7 +8,21 @@ type User = {
 };
 
 export const handler: Handler = async (event) => {
-  const cookies = parse(event.headers.cookie);
+  if (!event.headers.cookie) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ isLoggedIn: false, user: {} }),
+    };
+  }
+  const cookies = parse(event.headers?.cookie);
+  console.log({ cookies });
+  if (!cookies['nf-gh-session']) {
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ isLoggedIn: false, user: {} }),
+    };
+  }
+  console.log('hello?');
   const auth = JSON.parse(cookies['nf-gh-session']);
   let isLoggedIn = false;
   let user: User = {};
@@ -29,6 +43,10 @@ export const handler: Handler = async (event) => {
     }
   } catch (err) {
     console.log(err);
+    return {
+      statusCode: 401,
+      body: JSON.stringify({ isLoggedIn: false, user: {} }),
+    };
   }
 
   return {

@@ -1,36 +1,52 @@
-import { Handler } from '@netlify/functions';
+import NetlifyGraph from './netlifyGraph';
 import { parse } from 'cookie';
-import { graphql } from '@octokit/graphql';
 
-export const handler: Handler = async (event) => {
-  const [, , , username = 'netlify'] = event.path.split('/');
+export const handler = async (event) => {
+  const [, , , username = 'jlengstorf'] = event.path.split('/');
   const cookies = parse(event.headers.cookie);
   const auth = JSON.parse(cookies['nf-gh-session']);
 
-  const { user } = await graphql(
-    `
-      query ($login: String!) {
-        user(login: $login) {
-          login
-          name
-          avatarUrl
-          viewerCanSponsor
-          viewerIsSponsoring
-          isSponsoringViewer
-        }
-      }
-    `,
-    {
+  const { errors: GitHubDataErrors, data: GitHubDataData } =
+    await NetlifyGraph.fetchGitHubData({
       login: username,
-      headers: {
-        Authorization: `token ${auth.access_token}`,
-      },
-    },
-  );
+      gitHubOAuthToken: auth.access_token,
+    });
+
+  if (GitHubDataErrors) {
+    console.error(JSON.stringify(GitHubDataErrors, null, 2));
+  }
+
+  const user = GitHubDataData.gitHub.user;
 
   return {
     statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user),
+    headers: {
+      'content-type': 'application/json',
+    },
   };
 };
+
+/**
+ * Client-side invocations:
+ * Call your Netlify function from the browser (after saving
+ * the code to `GitHubData.js`) with these helpers:
+ */
+
+/**
+async function fetchGitHubData(oneGraphAuth, params) {
+  const {} = params || {};
+  const resp = await fetch(`/.netlify/functions/GitHubData`,
+    {
+      method: "POST",
+      body: JSON.stringify({}),
+      headers: {
+        ...oneGraphAuth?.authHeaders()
+      }
+    });
+
+    const text = await resp.text();
+
+    return JSON.parse(text);
+}
+*/

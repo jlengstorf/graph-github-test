@@ -7881,6 +7881,7 @@ enum OneGraphCustomServiceAuthServiceEnum {
   PRODUCT_HUNT
   QUICKBOOKS
   SALESFORCE
+  SANITY
   SLACK
   SPOTIFY
   STRIPE
@@ -11297,6 +11298,52 @@ type OneGraphSalesforceServiceAuth implements OneGraphServiceAuth {
   cname: String
 }
 
+"""Custom OAuth client for Sanity"""
+type OneGraphSanityServiceAuth implements OneGraphServiceAuth {
+  """id for the service auth"""
+  id: String!
+
+  """
+  The service that the clientId and clientSecret belong to, e.g. "gmail"
+  """
+  service: String!
+
+  """clientId for the serviceAuth."""
+  clientId: String!
+
+  """clientSecret for the serviceAuth."""
+  clientSecret: String!
+
+  """
+  Optional pubsub topic for gmail auth. Required to use gmail subscriptions with custom OAuth credentials.
+  """
+  gmailWatchPubSubTopic: String
+
+  """
+  Developer token for the Google Ads api. Required to use the Google Ads api.
+  """
+  googleDeveloperToken: String
+
+  """
+  App name for Trello OAuth client. This is the name that will be displayed on the OAuth login form.
+  """
+  trelloAppName: String
+
+  """Optional scopes to use for the OAuth flow."""
+  scopes: [String!]
+
+  """
+  If true, the bearer token that is created fetchable by the user whose account the token grants access to.
+  """
+  revealTokens: Boolean!
+
+  """Custom OAuth redirect URI."""
+  customRedirectUri: String
+
+  """Custom CNAME host."""
+  cname: String
+}
+
 """Slack Event Webhook for an app."""
 type OneGraphSlackEventWebhook {
   """Unique identifier."""
@@ -12136,6 +12183,9 @@ type OneGraphServiceQuery {
     id: String!
   ): OneGraphGraphQLSchema!
   authlifyToken(authlifyTokenId: String!): AuthlifyToken!
+
+  """Personal access token lookup"""
+  personalToken(accessToken: String!): OneGraphAccessToken
   netlifyCliEvents(
     """The number of events to fetch. The maximum is 1000."""
     first: Int = 1000
@@ -12246,6 +12296,9 @@ input OneGraphServiceUserIds {
 
   """User id for Salesforce"""
   salesforce: String
+
+  """User id for Sanity"""
+  sanity: String
 
   """User id for Slack"""
   slack: String
@@ -35999,6 +36052,7 @@ enum OneGraphServiceEnumArg {
   PRODUCT_HUNT
   QUICKBOOKS
   SALESFORCE
+  SANITY
   SLACK
   SPOTIFY
   STRIPE
@@ -36232,6 +36286,7 @@ enum OneGraphServiceEnum {
   PRODUCT_HUNT
   QUICKBOOKS
   SALESFORCE
+  SANITY
   SLACK
   SPOTIFY
   STRIPE
@@ -36323,6 +36378,7 @@ type OneGraphServicesMetadata {
   productHunt: OneGraphServiceMetadata!
   quickbooks: OneGraphServiceMetadata!
   salesforce: OneGraphServiceMetadata!
+  sanity: OneGraphServiceMetadata!
   slack: OneGraphServiceMetadata!
   spotify: OneGraphServiceMetadata!
   stripe: OneGraphServiceMetadata!
